@@ -38,12 +38,14 @@ subroutine gmtb_scm_main_sub()
   integer                           :: i, j, grid_error
   real(kind=8)                            :: rinc(5) !(DAYS, HOURS, MINUTES, SECONDS, MILLISECONDS)
   integer              :: jdat(1:8)
+  real (kind=8), pointer :: my_co(:)
 
   type(ccpp_t), allocatable, target                      :: cdata(:)
 
   integer                                                :: cdata_time_index
   integer                                                :: ierr
 
+  allocate(my_co(4))
   call get_config_nml(scm_state)
 
   call get_case_init(scm_state, scm_input)
@@ -148,6 +150,7 @@ subroutine gmtb_scm_main_sub()
       call ccpp_field_add(cdata(i), 'natural_log_of_ozone_forcing_data_pressure_levels_from_host', physics%ozone_pres, ierr, 'Pa')
       call ccpp_field_add(cdata(i), 'time_levels_in_ozone_forcing_data_from_host', physics%ozone_time, ierr, 'day')
       call ccpp_field_add(cdata(i), 'ozone_forcing_from_host', physics%ozone_forcing_in, ierr, 'various')
+      call ccpp_field_add(cdata(i), 'my_volume_mixing_ratio_co', my_co, ierr, 'kg kg-1')
       call ccpp_field_add(cdata(i), 'error_message', physics%Interstitial(i)%errmsg, ierr, 'none')
       call ccpp_field_add(cdata(i), 'error_flag', physics%Interstitial(i)%errflg, ierr, 'flag')
 
@@ -158,10 +161,11 @@ subroutine gmtb_scm_main_sub()
           stop
       end if
 
-      call physics%associate(scm_state, i)
     !use ccpp_fields.inc to call ccpp_field_add for all variables to be exposed to CCPP (this is auto-generated from /src/ccpp/scripts/ccpp_prebuild.py - the script parses tables in gmtb_scm_type_defs.f90)
 
-#include "ccpp_fields.inc"
+# include "ccpp_fields.inc"
+
+      call physics%associate(scm_state, i)
 
   end do
 

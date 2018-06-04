@@ -2,11 +2,11 @@
 
 echo "Setting environment variables for SCM-CCPP on CENTOS with gcc/gfortran"
 
-export CC=/usr/local/bin/gcc
-export CXX=/usr/local/bin/g++
-export F77=/usr/local/bin/gfortran
-export F90=/usr/local/bin/gfortran
-export FC=/usr/local/bin/gfortran
+export CC=/opt/local/bin/gcc
+export CXX=/opt/local/bin/g++
+export F77=/opt/local/bin/gfortran
+export F90=/opt/local/bin/gfortran
+export FC=/opt/local/bin/gfortran
 
-export NETCDF=/usr/local
-
+export NETCDF=/opt/local
+export LD_LIBRARY_PATH="/opt/local/lib64:/opt/local/lib"
