@@ -1,6 +1,8 @@
-[submodule "ccpp-framework"]
-	path = ccpp-framework
-	url = https://github.com/cacraigucar/ccpp-framework
 [submodule "ccpp-physics"]
 	path = ccpp-physics
 	url = https://github.com/cacraigucar/ccpp-physics
+	branch = cac_devel
+[submodule "ccpp-framework"]
+	path = ccpp-framework
+	url = https://github.com/cacraigucar/ccpp-framework
+	branch = cac_devel
