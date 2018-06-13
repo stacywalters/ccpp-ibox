@@ -1,4 +1,4 @@
-module gmtb_scm_main
+module micm_main
 
 implicit none
 
@@ -321,13 +321,13 @@ subroutine gmtb_scm_main_sub()
 
 end subroutine gmtb_scm_main_sub
 
-end module gmtb_scm_main
+end module micm_main
 
 !> \brief Main SCM program that calls the main SCM subroutine
 !!
 !! The Doxygen documentation system cannot handle in-body comments in Fortran main programs, so the "main" program was put in the
 !! subroutine \ref gmtb_scm_main_sub above.
 program gmtb_scm
-  use gmtb_scm_main
+  use micm_main
   call gmtb_scm_main_sub()
 end program gmtb_scm

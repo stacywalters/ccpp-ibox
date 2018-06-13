@@ -38,7 +38,7 @@ ADD_COMPILE_OPTIONS(-O0)
 ADD_SUBDIRECTORY(${CCPP_SRC} ${CMAKE_BINARY_DIR}/ccpp-framework)
 ADD_SUBDIRECTORY(${GFSPHYSICS_SRC} ${CMAKE_BINARY_DIR}/ccpp-physics)
 
-SET(scm_source_files gmtb_scm.F90
+SET(scm_source_files micm.F90
             gmtb_scm_input.f90
             gmtb_scm_utils.f90
             gmtb_scm_vgrid.F90
@@ -132,9 +132,9 @@ else(OPENMP)
   message (STATUS "Disable OpenMP support for C/C++/Fortran compiler")
 endif()
 
-ADD_EXECUTABLE(gmtb_scm ${scm_source_files})
-TARGET_LINK_LIBRARIES(gmtb_scm ccppphys ccpp ${NETCDF_LIBRARIES})
-#set_target_properties(gmtb_scm PROPERTIES
+ADD_EXECUTABLE(micm ${scm_source_files})
+TARGET_LINK_LIBRARIES(micm ccppphys ccpp ${NETCDF_LIBRARIES})
+#set_target_properties(micm PROPERTIES
 #                               COMPILE_FLAGS "${CMAKE_Fortran_FLAGS}"
 #                               LINK_FLAGS "${CMAKE_Fortran_FLAGS}")
 
