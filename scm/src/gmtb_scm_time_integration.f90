@@ -60,24 +60,24 @@ subroutine do_time_step(scm_state, cdata)
   !! @{
 
   !> - Call apply_forcing_* from \ref forcing. This routine updates the "input" state variables for the physics call (updates filtered values from previous timestep, if leapfrog scheme). It effectively replaces the change of the state variables due to dynamics.
-  select case(scm_state%time_scheme)
-    case(1)
-      call apply_forcing_forward_Euler(scm_state)
-    case(2)
-      call apply_forcing_leapfrog(scm_state)
-    case default
-      call apply_forcing_forward_Euler(scm_state)
-  end select
+!  select case(scm_state%time_scheme)
+!    case(1)
+!      call apply_forcing_forward_Euler(scm_state)
+!    case(2)
+!      call apply_forcing_leapfrog(scm_state)
+!    case default
+!      call apply_forcing_forward_Euler(scm_state)
+!  end select
 
-  if (scm_state%time_scheme == 2) then
-    !IPD cdata points to time level 2 for updating state variables; update time level 2 state variables with those where the forcing has been applied this time step
-    scm_state%state_T(:,1,:,2) = scm_state%state_T(:,1,:,1)
-    scm_state%state_tracer(:,1,:,:,2) = scm_state%state_tracer(:,1,:,:,1)
-    scm_state%state_u(:,1,:,2) = scm_state%state_u(:,1,:,1)
-    scm_state%state_v(:,1,:,2) = scm_state%state_v(:,1,:,1)
-  end if
+!  if (scm_state%time_scheme == 2) then
+!    !IPD cdata points to time level 2 for updating state variables; update time level 2 state variables with those where the forcing has been applied this time step
+!    scm_state%state_T(:,1,:,2) = scm_state%state_T(:,1,:,1)
+!    scm_state%state_tracer(:,1,:,:,2) = scm_state%state_tracer(:,1,:,:,1)
+!    scm_state%state_u(:,1,:,2) = scm_state%state_u(:,1,:,1)
+!    scm_state%state_v(:,1,:,2) = scm_state%state_v(:,1,:,1)
+!  end if
 
-  do i=1, scm_state%n_cols
+  do i=1, 3
     call ccpp_physics_run(cdata(i), ierr=ierr)
     if (ierr/=0) then
         write(*,'(a,i0,a)') 'An error occurred in ccpp_physics_run for column ', i, '. Exiting...'
@@ -86,12 +86,12 @@ subroutine do_time_step(scm_state, cdata)
   end do
 
 
-  !if no physics call, need to transfer state_variables(:,:,1) to state_variables (:,:,2)
-  ! scm_state%state_T(:,:,2) = scm_state%state_T(:,:,1)
-  ! scm_state%state_tracer(:,:,:,2) = scm_state%state_tracer(:,:,:,1)
-  ! scm_state%state_u(:,:,2) = scm_state%state_u(:,:,1)
-  ! scm_state%state_v(:,:,2) = scm_state%state_v(:,:,1)
-
+!  !if no physics call, need to transfer state_variables(:,:,1) to state_variables (:,:,2)
+!  ! scm_state%state_T(:,:,2) = scm_state%state_T(:,:,1)
+!  ! scm_state%state_tracer(:,:,:,2) = scm_state%state_tracer(:,:,:,1)
+!  ! scm_state%state_u(:,:,2) = scm_state%state_u(:,:,1)
+!  ! scm_state%state_v(:,:,2) = scm_state%state_v(:,:,1)
+!
   !> @}
 end subroutine
 
