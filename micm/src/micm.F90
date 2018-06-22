@@ -24,9 +24,11 @@ subroutine micm_main_sub()
 !  type(scm_state_type), target :: scm_state
 !  type(scm_input_type), target :: scm_input
 !  type(scm_reference_type), target :: scm_reference
-!  type(physics_type), target :: physics
 
-   integer                           :: i
+! USE THIS SOON
+  type(micm_type), target :: micm_data
+
+  integer                           :: i
   real (kind=8), pointer :: my_co(:)
   character(len=512)     :: errmsg
   integer :: errflg
@@ -41,16 +43,15 @@ subroutine micm_main_sub()
   allocate(cdata(my_size))
 
   do i = 1, my_size
-      call ccpp_init( '../../ccpp-framework/examples/suite_scm_GFS_test.xml', cdata(i), ierr)
+      call ccpp_init( '../suites/suite_MICM_test_simple.xml', cdata(i), ierr)
       if (ierr/=0) then
           write(*,'(a,i0,a)') 'An error occurred in ccpp_init for column ', i, '. Exiting...'
           stop
       end if
 
-!
-      call ccpp_field_add(cdata(i), 'my_volume_mixing_ratio_co', my_co, ierr, 'kg kg-1')
-      call ccpp_field_add(cdata(i), 'error_message', errmsg, ierr, 'none')
-      call ccpp_field_add(cdata(i), 'error_flag', errflg, ierr, 'flag')
+    !use ccpp_fields.inc to call ccpp_field_add for all variables to be exposed to CCPP (this is auto-generated from /src/ccpp/scripts/ccpp_prebuild.py - the script parses tables in micm_type_defs.f90)
+
+#  include "ccpp_fields.inc"
 
       !initialize easch column's physics
       call ccpp_physics_init(cdata(i), ierr=ierr)
@@ -58,10 +59,6 @@ subroutine micm_main_sub()
           write(*,'(a,i0,a)') 'An error occurred in ccpp_physics_init for column ', i, '. Exiting...'
           stop
       end if
-
-    !use ccpp_fields.inc to call ccpp_field_add for all variables to be exposed to CCPP (this is auto-generated from /src/ccpp/scripts/ccpp_prebuild.py - the script parses tables in micm_type_defs.f90)
-
-# include "ccpp_fields.inc"
 
   end do
 

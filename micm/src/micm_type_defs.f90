@@ -1,12 +1,12 @@
-!> \file gmtb_scm_type_defs.f90
-!!  Contains type definitions for SCM-related variables and physics-related variables
+!> \file micm_type_defs.f90
+!!  Contains type definitions for MICM variables and physics-related variables
 
-module gmtb_scm_type_defs
+module micm_type_defs
 
 
 ! Filter with CPP for PGI compiler
 #ifndef __PGI
-!> \section arg_table_physics_type
+!> \section arg_table_micm_type
 !! | local_name                                            | standard_name                                                                                     | long_name                                                                           | units         | rank | type                  |    kind   | intent | optional |
 !! |-------------------------------------------------------|---------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|---------------|------|-----------------------|-----------|--------|----------|
 !! | my_co(:)   | my_volume_mixing_ratio_co                        | volume mixing ratio co                  | kg kg-1 |    1 | real      | kind_phys | none   | F        |
@@ -18,7 +18,7 @@ module gmtb_scm_type_defs
 !!
 
 #endif
-  type physics_type
+  type micm_type
 
     real, allocatable      :: my_co(:)
     real                   :: dt
@@ -30,7 +30,7 @@ module gmtb_scm_type_defs
     contains
 !      procedure :: create => physics_create
 !      procedure :: associate => physics_associate
-  end type physics_type
+  end type micm_type
 
 
-end module gmtb_scm_type_defs
+end module micm_type_defs
