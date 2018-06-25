@@ -10,7 +10,7 @@ submodules within the SCM code.
   * `git clone -b cac_devel https://[username]@github.com/cacraigucar/ccpp-micm.git`
   and enter your github password when prompted.
 2. Change directory into the project.
-  * `cd micm`
+  * `cd ccpp-micm`
 3. Initialize the CCPP infrastructure and physics submodules.
   * `git submodule init`
 4. Update (download) the submodules.
@@ -21,8 +21,10 @@ submodules within the SCM code.
     * `git config submodule.ccpp-framework.url https://[username]@github.com/cacraig/ccpp-framework.git`
     * `git config submodule.ccpp-physics.url https://[username]@github.com/cacraig/ccpp-physics.git`
 5. Make sure the submodules are using the correct branch
-   a. cd ccpp-framework; git checkout cac_devel
-   b. cd ../ccpp-physics; git checkout cac_devel
+    * `cd ccpp-framework; git checkout cac_devel`
+    * ` cd ../ccpp-physics; git checkout cac_devel`
+6. Go back to the root of the checkout 
+   * `cd ..`
 
 ## Building and Compiling the SCM with CCPP
 1. Run the CCPP prebuild script to generate physics caps and makefile segments.
@@ -51,5 +53,6 @@ compiler environment variables.
   * `make`
 
 ## Running the SCM with CCPP
-1. Run `./micm`
+1. Run the job
+  * `./micm`
 
