@@ -1,0 +1,56 @@
+# User's Guide
+
+The MICM code calls CCPP-compliant
+physics schemes through the CCPP infrastructure code. As such, it requires the
+CCPP infrastructure code and physics code, both of which are included as git
+submodules within the SCM code. 
+
+## Obtaining Code
+1. Download a compressed file or clone the source using
+  * `git clone -b cac_devel https://[username]@github.com/cacraigucar/ccpp-micm.git`
+  and enter your github password when prompted.
+2. Change directory into the project.
+  * `cd micm`
+3. Initialize the CCPP infrastructure and physics submodules.
+  * `git submodule init`
+4. Update (download) the submodules.
+  * `git submodule update -- remote`
+  and, if asked, enter your github credentials again. If the machine is running an older
+  version of git and you are denied access, you may need to configure the
+  submodule URLs before repeating step 4 by executing this command:
+    * `git config submodule.ccpp-framework.url https://[username]@github.com/cacraig/ccpp-framework.git`
+    * `git config submodule.ccpp-physics.url https://[username]@github.com/cacraig/ccpp-physics.git`
+5. cd ccpp-framework; git checkout cac_devel
+6. cd ../ccpp-physics; git checkout cac_devel
+
+## Building and Compiling the SCM with CCPP
+1. Run the CCPP prebuild script to match required physics variables with those
+available from the dycore (SCM) and to generate physics caps and makefile
+segments.
+  * `./ccpp-framework/scripts/ccpp_prebuild.py --model=MICM`
+  Note: add `--debug` to see the full output of the script.
+2. Change directory to the top-level SCM directory.
+  * `cd micm`
+3. Run the machine setup script if necessary (the CENTOS script is needed for modeling2). This script loads
+compiler modules (Fortran 2003-compliant), netCDF module, etc. and sets
+compiler environment variables.
+  * `source etc/Theia_setup_intel.csh` (for csh) or `. etc/Theia_setup_intel.sh` (for bash)
+  * `source etc/Theia_setup_pgi.csh` (for csh) or `. etc/Theia_setup_pgi.sh` (for bash)
+  * `source etc/Cheyenne_setup_intel.csh` (for csh) or `. etc/Cheyenne_setup_intel.sh` (for bash)
+  * `source etc/Cheyenne_setup_pgi.csh` (for csh) or `. etc/Cheyenne_setup_pgi.sh` (for bash)
+  * `source etc/UBUNTU_setup.csh` (for csh) or `. etc/UBUNTU_setup.sh` (for bash) if following the instructions in doc/README_UBUNTU.txt
+  * `source etc/CENTOS_setup.csh` (for csh) or `. etc/CENTOS_setup.sh` (for bash) if following the instructions in doc/README_CENTOS.txt
+  * `source etc/MACOSX_setup.csh` (for csh) or `. etc/MACOSX_setup.sh` (for bash) if following the instructions in doc/README_MACOSX.txt
+4. Make a build directory and change into it.
+  * `mkdir bin && cd bin`
+5. Invoke cmake on the source code to build.
+  * `cmake ../src` (without threading/OpenMP)
+  * `cmake -DOPENMP=1 ../src` (with threading/OpenMP)
+
+  For extensive debugging output, add `-DCMAKE_BUILD_TYPE=Debug` to the `cmake` command.
+6. Compile. Add `VERBOSE=1` to obtain more information on the build process.
+  * `make`
+
+## Running the SCM with CCPP
+1. Run `./micm`
+

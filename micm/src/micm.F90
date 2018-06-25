@@ -43,11 +43,12 @@ subroutine micm_main_sub()
   allocate(cdata(my_size))
 
   do i = 1, my_size
-      call ccpp_init( '../suites/suite_MICM_test_simple.xml', cdata(i), ierr)
+      call ccpp_init( '../suites/suite_MICM_test_simple1.xml', cdata(i), ierr)
       if (ierr/=0) then
           write(*,'(a,i0,a)') 'An error occurred in ccpp_init for column ', i, '. Exiting...'
           stop
       end if
+
 
     !use ccpp_fields.inc to call ccpp_field_add for all variables to be exposed to CCPP (this is auto-generated from /src/ccpp/scripts/ccpp_prebuild.py - the script parses tables in micm_type_defs.f90)
 
@@ -69,6 +70,8 @@ subroutine micm_main_sub()
         write(*,'(a,i0,a)') 'An error occurred in ccpp_physics_run for column ', i, '. Exiting...'
         stop
     end if
+
+    write(6,*) ' At step i=',i,' my_co(1)=',my_co(1)
 
   end do
 
