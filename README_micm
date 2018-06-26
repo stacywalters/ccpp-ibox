@@ -7,31 +7,20 @@ submodules within the SCM code.
 
 ## Obtaining Code
 1. Download a compressed file or clone the source using
-  * `git clone -b cac_devel https://[username]@github.com/cacraigucar/ccpp-micm.git`
-  and enter your github password when prompted.
+  * `git clone -b cac_devel https://cacraigucar@github.com/cacraigucar/ccpp-ibox.git`
+  and enter your github password if prompted.
 2. Change directory into the project.
-  * `cd ccpp-micm`
-3. Initialize the CCPP infrastructure and physics submodules.
-  * `git submodule init`
-4. Update (download) the submodules.
-  * `git submodule update --remote`
-  and, if asked, enter your github credentials again. If the machine is running an older
-  version of git and you are denied access, you may need to configure the
-  submodule URLs before repeating step 4 by executing this command:
-    * `git config submodule.ccpp-framework.url https://[username]@github.com/cacraig/ccpp-framework.git`
-    * `git config submodule.ccpp-physics.url https://[username]@github.com/cacraig/ccpp-physics.git`
-5. Make sure the submodules are using the correct branch
-    * `cd ccpp-framework; git checkout cac_devel`
-    * ` cd ../ccpp-physics; git checkout cac_devel`
-6. Go back to the root of the checkout 
-   * `cd ..`
+  * `cd ccpp-ibox`
+3. Install the external libraries
+  * `manage_externals/checkout_externals`
+  and, if asked, enter your github credentials again. (It may ask for this a number of times)
 
 ## Building and Compiling the SCM with CCPP
 1. Run the CCPP prebuild script to generate physics caps and makefile segments.
-  * `./ccpp-framework/scripts/ccpp_prebuild.py --model=MICM`
+  * `./ccpp-framework/scripts/ccpp_prebuild.py --model=ibox`
   Note: add `--debug` to see the full output of the script.
 2. Change directory to the top-level SCM directory.
-  * `cd micm`
+  * `cd ibox`
 3. Run the machine setup script if necessary (the CENTOS script is needed for modeling2). This script loads
 compiler modules (Fortran 2003-compliant), netCDF module, etc. and sets
 compiler environment variables.
@@ -54,5 +43,5 @@ compiler environment variables.
 
 ## Running the SCM with CCPP
 1. Run the job
-  * `./micm`
+  * `./ibox`
 
