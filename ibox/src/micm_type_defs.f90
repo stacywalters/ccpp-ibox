@@ -4,9 +4,15 @@
 module micm_type_defs
 
 
+!-----------------------------------------------------------------------
+!-----------------------------------------------------------------------
+! The following definition sets up the variables for use within MICM
+!-----------------------------------------------------------------------
+!-----------------------------------------------------------------------
+
 ! Filter with CPP for PGI compiler
 #ifndef __PGI
-!> \section arg_table_micm_type
+!> \section arg_table_micm_data_type
 !! | local_name                                            | standard_name                                                                                     | long_name                                                                           | units         | rank | type                  |    kind   | intent | optional |
 !! |-------------------------------------------------------|---------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|---------------|------|-----------------------|-----------|--------|----------|
 !! | my_co(:)   | my_volume_mixing_ratio_co                        | volume mixing ratio co                  | kg kg-1 |    1 | real      | kind_phys | none   | F        |
@@ -18,19 +24,19 @@ module micm_type_defs
 !!
 
 #endif
-  type micm_type
+  type micm_data_type
 
     real, allocatable      :: my_co(:)
     real                   :: dt
-    real                   :: ncol
-    real                   :: nlev
+    integer                :: ncol
+    integer                :: nlev
     character(len=512)     :: errmsg
     integer                :: errflg
 
     contains
 !      procedure :: create => physics_create
 !      procedure :: associate => physics_associate
-  end type micm_type
+  end type micm_data_type
 
 
 end module micm_type_defs

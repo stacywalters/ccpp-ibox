@@ -75,27 +75,27 @@
 !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-module chemistry
+module chem_solve
 
   implicit none
 
   private
-  public :: chemistry_init 
-  public :: chemistry_finalize
-  public :: chemistry_run
+  public :: chem_solve_init 
+  public :: chem_solve_finalize
+  public :: chem_solve_run
 
   integer, parameter :: rk = 8
   
 contains
 
-!> \section arg_table_chemistry_init Argument Table
+!> \section arg_table_chem_solve_init Argument Table
 !! | local_name | standard_name                                    | long_name                               | units   | rank | type      | kind      | intent | optional |
 !! |------------|--------------------------------------------------|-----------------------------------------|---------|------|-----------|-----------|--------|----------|
 !! | co         | my_volume_mixing_ratio_co                        | CO volume mixing ratio                  | kg kg-1 |    1 | real      | kind_phys | inout  | F        |
 !! | errmsg     | error_message                                    | CCPP error message                      | none    |    0 | character | len=512   | out    | F        |
 !! | errflg     | error_flag                                       | CCPP error flag                         | flag    |    0 | integer   |           | out    | F        |
 !!
-  subroutine chemistry_init (co, errmsg, errflg)
+  subroutine chem_solve_init (co, errmsg, errflg)
 
     implicit none
 
@@ -106,12 +106,9 @@ contains
 
     co(:) = 100_rk
 
-  end subroutine chemistry_init
+  end subroutine chem_solve_init
 
-  subroutine chemistry_finalize()
-  end subroutine chemistry_finalize
-
-!> \section arg_table_chemistry_run Argument Table
+!> \section arg_table_chem_solve_run Argument Table
 !! | local_name | standard_name                                    | long_name                               | units   | rank | type      | kind      | intent | optional |
 !! |------------|--------------------------------------------------|-----------------------------------------|---------|------|-----------|-----------|--------|----------|
 !! | co         | my_volume_mixing_ratio_co                        | CO  volume mixing ratio                 | kg kg-1 |    1 | real      | kind_phys | inout  | F        |
@@ -121,8 +118,8 @@ contains
 !*! | dt         | time_step_for_physics                            | physics time step                       | s       |    0 | real      | kind_phys | in     | F        |
 !*! | ncol       | horizontal_loop_extent                           | horizontal dimension                    | count   |    0 | integer   |           | in     | F        |
 !*! | nlev       | adjusted_vertical_layer_dimension_for_radiation  | number of vertical layers for radiation | count   |    0 | integer   |           | in     | F        |
-!  subroutine chemistry_run (dt, ncol,nlev, co, errmsg, errflg)
-  subroutine chemistry_run ( co, errmsg, errflg)
+!  subroutine chem_solve_run (dt, ncol,nlev, co, errmsg, errflg)
+  subroutine chem_solve_run ( co, errmsg, errflg)
 
     implicit none
 
@@ -152,6 +149,9 @@ contains
 
     return
 
-  end subroutine chemistry_run
+  end subroutine chem_solve_run
 
-end module chemistry
+  subroutine chem_solve_finalize()
+  end subroutine chem_solve_finalize
+
+end module chem_solve
