@@ -84,49 +84,43 @@ module chem_solve
   public :: chem_solve_finalize
   public :: chem_solve_run
 
-  integer, parameter :: rk = 8
+  integer, parameter :: kind_phys = 8
   
 contains
 
 !> \section arg_table_chem_solve_init Argument Table
-!! | local_name | standard_name                                    | long_name                               | units   | rank | type      | kind      | intent | optional |
-!! |------------|--------------------------------------------------|-----------------------------------------|---------|------|-----------|-----------|--------|----------|
-!! | co         | my_volume_mixing_ratio_co                        | CO volume mixing ratio                  | kg kg-1 |    1 | real      | kind_phys | inout  | F        |
-!! | errmsg     | error_message                                    | CCPP error message                      | none    |    0 | character | len=512   | out    | F        |
-!! | errflg     | error_flag                                       | CCPP error flag                         | flag    |    0 | integer   |           | out    | F        |
+!! | local_name | standard_name                                    | long_name                               | units       | rank | type      | kind      | intent | optional |
+!! |------------|--------------------------------------------------|-----------------------------------------|-------------|------|-----------|-----------|--------|----------|
+!! | co         | my_volume_mixing_ratio_co                        | CO volume mixing ratio                  | mole mole-1 |    1 | real      | kind_phys | inout  | F        |
+!! | errmsg     | error_message                                    | CCPP error message                      | none        |    0 | character | len=512   | out    | F        |
+!! | errflg     | error_flag                                       | CCPP error flag                         | flag        |    0 | integer   |           | out    | F        |
 !!
   subroutine chem_solve_init (co, errmsg, errflg)
 
     implicit none
 
     !--- arguments
-    real(rk),pointer, intent(inout) :: co(:)
+    real(kind_phys),pointer, intent(inout) :: co(:)
     character(len=512), intent(out)   :: errmsg
     integer,          intent(out)   :: errflg
-
-    co(:) = 100_rk
+  
+    co(:) = 100_kind_phys
 
   end subroutine chem_solve_init
 
 !> \section arg_table_chem_solve_run Argument Table
-!! | local_name | standard_name                                    | long_name                               | units   | rank | type      | kind      | intent | optional |
-!! |------------|--------------------------------------------------|-----------------------------------------|---------|------|-----------|-----------|--------|----------|
-!! | co         | my_volume_mixing_ratio_co                        | CO  volume mixing ratio                 | kg kg-1 |    1 | real      | kind_phys | inout  | F        |
-!! | errmsg     | error_message                                    | CCPP error message                      | none    |    0 | character | len=512   | out    | F        |
-!! | errflg     | error_flag                                       | CCPP error flag                         | flag    |    0 | integer   |           | out    | F        |
+!! | local_name | standard_name                                    | long_name                               | units       | rank | type      | kind      | intent | optional |
+!! |------------|--------------------------------------------------|-----------------------------------------|-------------|------|-----------|-----------|--------|----------|
+!! | co         | my_volume_mixing_ratio_co                        | CO  volume mixing ratio                 | mole mole-1 |    1 | real      | kind_phys | inout  | F        |
+!! | errmsg     | error_message                                    | CCPP error message                      | none        |    0 | character | len=512   | out    | F        |
+!! | errflg     | error_flag                                       | CCPP error flag                         | flag        |    0 | integer   |           | out    | F        |
 !!
-!*! | dt         | time_step_for_physics                            | physics time step                       | s       |    0 | real      | kind_phys | in     | F        |
-!*! | ncol       | horizontal_loop_extent                           | horizontal dimension                    | count   |    0 | integer   |           | in     | F        |
-!*! | nlev       | adjusted_vertical_layer_dimension_for_radiation  | number of vertical layers for radiation | count   |    0 | integer   |           | in     | F        |
-!  subroutine chem_solve_run (dt, ncol,nlev, co, errmsg, errflg)
   subroutine chem_solve_run ( co, errmsg, errflg)
 
     implicit none
 
     !--- arguments
-!    real(rk),         intent(in)    :: dt
-!    integer,          intent(in)    :: ncol,nlev
-    real(rk), pointer,intent(inout) :: co(:)      
+    real(kind_phys), pointer,intent(inout) :: co(:)      
     character(len=512), intent(out)   :: errmsg
     integer,          intent(out)   :: errflg
 
@@ -142,7 +136,7 @@ contains
     !--- actual code
     ! add your code here
 
-    co(:) = co(:)*0.5_rk
+    co(:) = co(:)*0.5_kind_phys
     
     ! in case of errors, set errflg to a value != 0,
     ! create a meaningfull error message and return
