@@ -77,6 +77,8 @@
 
 module chem_solve
 
+  use micm_type_defs, only: chem_type
+  
   implicit none
 
   private
@@ -92,19 +94,26 @@ contains
 !! | local_name | standard_name                                    | long_name                               | units   | rank | type      | kind      | intent | optional |
 !! |------------|--------------------------------------------------|-----------------------------------------|---------|------|-----------|-----------|--------|----------|
 !! | co         | my_volume_mixing_ratio_co                        | CO volume mixing ratio                  | kg kg-1 |    1 | real      | kind_phys | inout  | F        |
+!! | chem_obj   | chemistry_data                                   | encapsulated stuff for chemistry        | DDT     |    0 | chem_type |           | none   | F        |
 !! | errmsg     | error_message                                    | CCPP error message                      | none    |    0 | character | len=512   | out    | F        |
 !! | errflg     | error_flag                                       | CCPP error flag                         | flag    |    0 | integer   |           | out    | F        |
 !!
-  subroutine chem_solve_init (co, errmsg, errflg)
+  subroutine chem_solve_init (co, chem_obj, errmsg, errflg)
 
     implicit none
 
     !--- arguments
-    real(rk),pointer, intent(inout) :: co(:)
-    character(len=512), intent(out)   :: errmsg
-    integer,          intent(out)   :: errflg
+    real(rk),           pointer :: co(:)
+    type(chem_type),    pointer :: chem_obj
+    character(len=512), intent(out) :: errmsg
+    integer,            intent(out) :: errflg
 
     co(:) = 100_rk
+
+    call chem_obj%set_some_stuff( 1.0 )
+    
+    errmsg = ''
+    errflg = 0
 
   end subroutine chem_solve_init
 
@@ -112,6 +121,7 @@ contains
 !! | local_name | standard_name                                    | long_name                               | units   | rank | type      | kind      | intent | optional |
 !! |------------|--------------------------------------------------|-----------------------------------------|---------|------|-----------|-----------|--------|----------|
 !! | co         | my_volume_mixing_ratio_co                        | CO  volume mixing ratio                 | kg kg-1 |    1 | real      | kind_phys | inout  | F        |
+!! | chem_obj   | chemistry_data                                   | encapsulated stuff for chemistry        | DDT     |    0 | chem_type |           | none   | F        |
 !! | errmsg     | error_message                                    | CCPP error message                      | none    |    0 | character | len=512   | out    | F        |
 !! | errflg     | error_flag                                       | CCPP error flag                         | flag    |    0 | integer   |           | out    | F        |
 !!
@@ -119,18 +129,18 @@ contains
 !*! | ncol       | horizontal_loop_extent                           | horizontal dimension                    | count   |    0 | integer   |           | in     | F        |
 !*! | nlev       | adjusted_vertical_layer_dimension_for_radiation  | number of vertical layers for radiation | count   |    0 | integer   |           | in     | F        |
 !  subroutine chem_solve_run (dt, ncol,nlev, co, errmsg, errflg)
-  subroutine chem_solve_run ( co, errmsg, errflg)
+  subroutine chem_solve_run ( co, chem_obj, errmsg, errflg)
 
     implicit none
 
     !--- arguments
-!    real(rk),         intent(in)    :: dt
-!    integer,          intent(in)    :: ncol,nlev
-    real(rk), pointer,intent(inout) :: co(:)      
+    real(rk),           pointer :: co(:)
+    type(chem_type),    pointer :: chem_obj
     character(len=512), intent(out)   :: errmsg
-    integer,          intent(out)   :: errflg
+    integer,            intent(out)   :: errflg
 
     !--- local variables
+    real :: x
  
     !--- initialize CCPP error handling variables
     errmsg = ''
@@ -143,7 +153,11 @@ contains
     ! add your code here
 
     co(:) = co(:)*0.5_rk
-    
+
+    x = chem_obj%get_some_stuff()
+    x = x*2.
+    call chem_obj%set_some_stuff(x)
+
     ! in case of errors, set errflg to a value != 0,
     ! create a meaningfull error message and return
 
