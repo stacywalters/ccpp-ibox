@@ -65,6 +65,9 @@ subroutine ibox_main_sub()
 
   end do
 
+  write(6,*) ' '
+  write(6,*) 'After initialization, my_co(1)=',my_co(1)
+  write(6,*) ' '
 
   do j = 1, ntimes
     do i = 1, ncols

@@ -81,8 +81,8 @@ module chem_solve
 
   private
   public :: chem_solve_init 
-  public :: chem_solve_finalize
   public :: chem_solve_run
+  public :: chem_solve_finalize
 
   integer, parameter :: kind_phys = 8
   
