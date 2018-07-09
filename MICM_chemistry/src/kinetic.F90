@@ -75,81 +75,69 @@
 !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-module chem_solve
+module kinetic
 
   implicit none
 
   private
-  public :: chem_solve_init 
-  public :: chem_solve_run
-  public :: chem_solve_finalize
+  public :: kinetic_init 
+  public :: kinetic_run
+  public :: kinetic_finalize
 
   integer, parameter :: kind_phys = 8
   
 contains
 
-!> \section arg_table_chem_solve_init Argument Table
+!> \section arg_table_kinetic_init  Argument Table
 !! | local_name | standard_name                                    | long_name                               | units       | rank | type      | kind      | intent | optional |
 !! |------------|--------------------------------------------------|-----------------------------------------|-------------|------|-----------|-----------|--------|----------|
-!! | co         | my_volume_mixing_ratio_co                        | CO volume mixing ratio                  | mole mole-1 |    1 | real      | kind_phys | inout  | F        |
 !! | errmsg     | error_message                                    | CCPP error message                      | none        |    0 | character | len=512   | out    | F        |
 !! | errflg     | error_flag                                       | CCPP error flag                         | flag        |    0 | integer   |           | out    | F        |
 !!
-  subroutine chem_solve_init (co, errmsg, errflg)
+  subroutine kinetic_init (errmsg, errflg)
 
-    implicit none
-
-    !--- arguments
-    real(kind_phys),pointer, intent(inout) :: co(:)
-    character(len=512), intent(out)   :: errmsg
-    integer,          intent(out)   :: errflg
-  
-    co(:) = 100_kind_phys
-
-  end subroutine chem_solve_init
-
-!> \section arg_table_chem_solve_run Argument Table
-!! | local_name | standard_name                                    | long_name                               | units       | rank | type      | kind      | intent | optional |
-!! |------------|--------------------------------------------------|-----------------------------------------|-------------|------|-----------|-----------|--------|----------|
-!! | k_rateConst| k_rate_constants                                 | k Rate Constants                        | none        |    1 | real      | kind_phys | in     | F        |
-!! | co         | my_volume_mixing_ratio_co                        | CO  volume mixing ratio                 | mole mole-1 |    1 | real      | kind_phys | inout  | F        |
-!! | errmsg     | error_message                                    | CCPP error message                      | none        |    0 | character | len=512   | out    | F        |
-!! | errflg     | error_flag                                       | CCPP error flag                         | flag        |    0 | integer   |           | out    | F        |
-!!
-  subroutine chem_solve_run ( k_rateConst, co, errmsg, errflg)
-
-    implicit none
-
-    !--- arguments
-    real(kind_phys),pointer, intent(in)    :: k_rateConst(:)
-    real(kind_phys), pointer,intent(inout) :: co(:)      
-    character(len=512), intent(out)   :: errmsg
-    integer,          intent(out)   :: errflg
-
-    !--- local variables
- 
-    !--- initialize CCPP error handling variables
+    character(len=512),      intent(out)   :: errmsg
+    integer,                 intent(out)   :: errflg
+    
     errmsg = ''
     errflg = 0
 
-    !--- initialize intent(out) variables
-    ! initialize all intent(out) variables here
+  end subroutine kinetic_init
 
-    !--- actual code
-    ! add your code here
+!> \section arg_table_kinetic_run  Argument Table
+!! | local_name | standard_name                                    | long_name                               | units       | rank | type      | kind      | intent | optional |
+!! |------------|--------------------------------------------------|-----------------------------------------|-------------|------|-----------|-----------|--------|----------|
+!! | T          | air_temperature                                  | Temperature                             | K           |    0 | real      | kind_phys | in     | F        |
+!! | k_rateConst| k_rate_constants                                 | k Rate Constants                        | none        |    1 | real      | kind_phys | inout  | F        |
+!! | errmsg     | error_message                                    | CCPP error message                      | none        |    0 | character | len=512   | out    | F        |
+!! | errflg     | error_flag                                       | CCPP error flag                         | flag        |    0 | integer   |           | out    | F        |
+!!
+  subroutine kinetic_run  (T, k_rateConst, errmsg, errflg)
 
-    co(1) = co(1)*k_rateConst(1)
-    co(2:) = co(2:)*0.5_kind_phys
+    implicit none
 
-    
-    ! in case of errors, set errflg to a value != 0,
-    ! create a meaningfull error message and return
+    !--- arguments
+    real(kind_phys),         intent(in)    :: T  ! temperature
+    real(kind_phys),pointer, intent(inout) :: k_rateConst(:)
+    character(len=512),      intent(out)   :: errmsg
+    integer,                 intent(out)   :: errflg
 
-    return
+    real(kind_phys)  :: t_inverse
+  
+    errmsg = ''
+    errflg = 0
 
-  end subroutine chem_solve_run
+    t_inverse = 1_kind_phys/T
 
-  subroutine chem_solve_finalize()
-  end subroutine chem_solve_finalize
+    k_rateConst(1) = 0.04_kind_phys
+    k_rateConst(2) = 1e+4_kind_phys
+    k_rateConst(3) = 1.5e7_kind_phys * exp(0 * t_inverse)
 
-end module chem_solve
+    write(6,*) ' inside kinetic_run T=',T
+
+  end subroutine kinetic_run
+
+  subroutine kinetic_finalize()
+  end subroutine kinetic_finalize
+
+end module kinetic
